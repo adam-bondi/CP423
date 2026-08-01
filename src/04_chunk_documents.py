@@ -2,12 +2,12 @@ import pandas as pd
 import os
 
 DOCUMENTS_TEXT_CSV = "data/processed/documents_text.csv"
-OUT_PATH = "data/processed/chunks.csv"
+OUTPUT_PATH = "data/processed/chunks.csv"
 
 CHUNK_WORDS = 200      # target chunk size in words
 OVERLAP_WORDS = 40     # overlap between consecutive chunks
 
-
+# function to chunk text
 def chunk_text(text: str, chunk_words: int, overlap_words: int):
     words = text.split()
     if len(words) <= chunk_words:
@@ -24,10 +24,10 @@ def chunk_text(text: str, chunk_words: int, overlap_words: int):
         start += step
     return chunks
 
-
+# run above function on corpus document text to chunk into 200-word passages with 40-word overlap
 df = pd.read_csv(DOCUMENTS_TEXT_CSV)
-
 records = []
+
 for _, row in df.iterrows():
     doc_id = row["doc_id"]
     pieces = chunk_text(str(row["text"]), CHUNK_WORDS, OVERLAP_WORDS)
@@ -45,11 +45,13 @@ for _, row in df.iterrows():
             "word_count": len(piece.split()),
         })
 
+# make output directory
 os.makedirs("data/processed", exist_ok=True)
 chunks_df = pd.DataFrame(records)
-chunks_df.to_csv(OUT_PATH, index=False)
+chunks_df.to_csv(OUTPUT_PATH, index=False)
 
+# summary
 print(f"Documents processed: {df['doc_id'].nunique()}")
 print(f"Total chunks created: {len(chunks_df)}")
 print(f"Avg chunks per document: {len(chunks_df) / df['doc_id'].nunique():.2f}")
-print(f"Saved to {OUT_PATH}")
+print(f"Saved to {OUTPUT_PATH}")
