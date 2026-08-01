@@ -33,6 +33,7 @@ for _, row in documents.iterrows():
 
     try:
         response = requests.get(url, headers=USER_AGENT, timeout=REQUEST_TIMEOUT)
+        response.encoding = response.apparent_encoding
         response.raise_for_status()
         
         with open(output_path, "w", encoding="utf-8") as f:
