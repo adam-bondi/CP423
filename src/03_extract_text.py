@@ -84,4 +84,4 @@ documents.to_csv(OUTPUT_FILE, index=False)
 
 # summary
 print(f"\nSaved {len(documents)} documents.")
-print(f"Output: {OUTPUT_FILE}")
+print(f"Output: data/processed/documents_text.csv")
