@@ -4,7 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-RAW_DIRECTORY = "data/raw/pages"
+RAW_DIR = "data/raw/pages"
 METADATA_FILE = "data/metadata/documents.csv"
 OUTPUT_DIR = "data/processed"
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, "documents_text.csv")
@@ -22,7 +22,7 @@ for _, row in tqdm(metadata.iterrows(),
 
     doc_id = row["doc_id"]
     html_file = os.path.join(
-        RAW_DIRECTORY, f"{doc_id:04d}.html")
+        RAW_DIR, f"{doc_id:04d}.html")
 
     if not os.path.exists(html_file):
         continue
