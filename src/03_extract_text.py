@@ -69,7 +69,7 @@ for _, row in tqdm(metadata.iterrows(),
 
     records.append({
         "doc_id": row["doc_id"],
-        "title": title,
+        "title": page_title,
         "heading": heading,
         "url": row["url"],
         "section": row["section"],
