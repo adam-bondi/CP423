@@ -4,7 +4,7 @@ import os
 DOCUMENTS_TEXT_CSV = "data/processed/documents_text.csv"
 OUTPUT_PATH = "data/processed/chunks.csv"
 
-CHUNK_WORDS = 250      # target chunk size in words
+CHUNK_WORDS = 400      # target chunk size in words
 OVERLAP_WORDS = 50     # overlap between consecutive chunks
 
 # function to chunk text
