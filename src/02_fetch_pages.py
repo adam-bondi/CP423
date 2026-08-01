@@ -24,7 +24,7 @@ failed = []
 for _, row in documents.iterrows():
     doc_id = row["doc_id"]
     url = row["url"]
-    output_path = os.path.join(OUTPUT_DIR, f"{doc_id}.html")
+    output_path = os.path.join(OUTPUT_DIR, f"{doc_id:04d}.html")
 
     # skip pages already downloaded
     if os.path.exists(output_path):
