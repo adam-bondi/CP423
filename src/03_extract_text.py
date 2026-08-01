@@ -1,80 +1,87 @@
+import os
+import re
 import pandas as pd
 from bs4 import BeautifulSoup
-import os
+from tqdm import tqdm
 
-DOCUMENTS_FILE = "data/metadata/documents.csv"
 RAW_DIRECTORY = "data/raw/pages"
-OUTPUT_PATH = "data/processed/documents_text.csv"
+METADATA_FILE = "data/metadata/documents.csv"
+OUTPUT_DIR = "data/processed"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "documents_text.csv")
 
-# tags/selectors that are boilerplate, not article content
-STRIP_TAGS = ["script", "style", "nav", "footer", "header", "noscript", "form", "aside"]
-# CSS selectors commonly used for boilerplate on university sites; adjusted after inspecting a few pages
-STRIP_SELECTORS = [".breadcrumb", ".site-header", ".site-footer", "#navigation", ".skip-link"]
+MIN_WORDS = 50
+# make output file and read metadata
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+metadata = pd.read_csv(METADATA_FILE)
 
-MIN_WORD_COUNT = 50  # drop pages that are near empty after cleaning
-
-# function to extract page title and text details
-def extract_page(html: str):
-    soup = BeautifulSoup(html, "html.parser")
-
-    title_tag = soup.find("title")
-    title = title_tag.get_text(strip=True) if title_tag else ""
-
-    for tag_name in STRIP_TAGS:
-        for tag in soup.find_all(tag_name):
-            tag.decompose()
-    for selector in STRIP_SELECTORS:
-        for tag in soup.select(selector):
-            tag.decompose()
-
-    # prefer <main> if present, else fall back to <body>
-    main = soup.find("main") or soup.find("body") or soup
-    text = main.get_text(separator=" ", strip=True)
-    text = " ".join(text.split())  # collapse whitespace
-
-    return title, text
-
-# read metadata and run function on collection corpus
-df = pd.read_csv(DOCUMENTS_FILE)
 records = []
-missing_html = 0
-too_short = 0
+# open collection pages doc-by-doc
+for _, row in tqdm(metadata.iterrows(),
+                   total=len(metadata),
+                   desc="Extracting text"):
 
-for _, row in df.iterrows():
     doc_id = row["doc_id"]
-    html_path = os.path.join(RAW_DIRECTORY, f"{doc_id}.html")
+    html_file = os.path.join(
+        RAW_DIRECTORY, f"{doc_id:04d}.html")
 
-    if not os.path.exists(html_path):
-        missing_html += 1
+    if not os.path.exists(html_file):
         continue
 
-    with open(html_path, "r", encoding="utf-8") as f:
-        html = f.read()
+    with open(html_file, "r", encoding="utf-8") as f:
+        soup = BeautifulSoup(f, "html.parser")
+    
+    # remove elements that are not useful for RAG
+    for tag in soup(["script", "style", "noscript", "header", "footer", "nav", "aside"]):
+        tag.decompose()
 
-    title, text = extract_page(html)
+    # remove common WLU HTML components
+    remove_selectors = [
+        ".breadcrumbs", ".breadcrumb", ".pathways", ".gradient", ".image", ".full-width-banner", ".site_header", ".site_footer"
+    ]
+
+    for selector in remove_selectors:
+        for tag in soup.select(selector):
+            tag.decompose()
+    
+    # focus on <main> content; if not found then <body>
+    main = soup.find("main")
+    if main is None:
+        main = soup.find("body")
+
+    if main is None:
+        continue
+
+    # find title and h1
+    page_title = soup.title.get_text(strip=True) if soup.title else ""
+    h1 = main.find("h1")
+    heading = h1.get_text(" ", strip=True) if h1 else ""
+    h1 = main.find("h1")
+    
+    # extract text
+    text = main.get_text(separator="\n")
+    text = re.sub(r"\n+", "\n", text)
+    text = re.sub(r"[ \t]+", " ", text)
+    text = text.strip()
+
     word_count = len(text.split())
-
-    if word_count < MIN_WORD_COUNT:
-        too_short += 1
+    if word_count < MIN_WORDS:
         continue
 
     records.append({
-        "doc_id": doc_id,
+        "doc_id": row["doc_id"],
+        "title": title,
+        "heading": heading,
         "url": row["url"],
         "section": row["section"],
         "last_modified": row["last_modified"],
-        "title": title,
-        "text": text,
         "word_count": word_count,
+        "text": text
     })
 
-# make output directory
-os.makedirs("data/processed", exist_ok=True)
-out_df = pd.DataFrame(records)
-out_df.to_csv(OUTPUT_PATH, index=False)
+# save to CSV output file
+documents = pd.DataFrame(records)
+documents.to_csv(OUTPUT_FILE, index=False)
 
 # summary
-print(f"Pages with no HTML on disk: {missing_html}")
-print(f"Pages dropped as too short (<{MIN_WORD_COUNT} words): {too_short}")
-print(f"Final documents with extracted text: {len(out_df)}")
-print(f"Saved to {OUTPUT_PATH}")
+print(f"\nSaved {len(documents)} documents.")
+print(f"Output: {OUTPUT_FILE}")
