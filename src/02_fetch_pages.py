@@ -35,8 +35,8 @@ for _, row in documents.iterrows():
         response = requests.get(url, headers=USER_AGENT, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         
-        with open(out_path, "w", encoding="utf-8") as f:
-            f.write(resp.text)   
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(response.text)   
         fetched += 1
     except requests.RequestException as e:
         failed.append({"doc_id": doc_id, "url": url, "error": str(e)})
