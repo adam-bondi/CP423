@@ -4,8 +4,8 @@ import os
 DOCUMENTS_TEXT_CSV = "data/processed/documents_text.csv"
 OUTPUT_PATH = "data/processed/chunks.csv"
 
-CHUNK_WORDS = 200      # target chunk size in words
-OVERLAP_WORDS = 40     # overlap between consecutive chunks
+CHUNK_WORDS = 250      # target chunk size in words
+OVERLAP_WORDS = 50     # overlap between consecutive chunks
 
 # function to chunk text
 def chunk_text(text: str, chunk_words: int, overlap_words: int):
