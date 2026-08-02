@@ -34,7 +34,7 @@ class DenseRetriever:
             row = self.chunks.iloc[idx]
             results.append({
                 "score": float(score),
-                "chunk_id": int(row["chunk_id"]),
+                "chunk_id": row["chunk_id"],
                 "doc_id": int(row["doc_id"]),
                 "title": row["title"],
                 "url": row["url"],

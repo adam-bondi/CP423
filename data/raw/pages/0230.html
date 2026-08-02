@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="EN">
+	<head profile="http://www.w3.org/1999/xhtml/vocab">
+		<meta charset="utf-8">
+		<meta name="MobileOptimized" content="width">
+		<meta name="HandheldFriendly" content="true">
+		<meta name="viewport" content="width=device-width">
+		<meta http-equiv="cleartype" content="on">		
+		<title>Laurier - Single Sign On</title>		
+		<link rel="stylesheet" type="text/css" href="/idp/css/normalize.min.css?v=1.0">
+		<link rel="stylesheet" type="text/css" href="/idp/css/login.min.css?v=1.0">		
+                <link rel="icon" type="image/x-icon" href="/idp/images/laurier-fav.png">
+        <script>
+        <!--
+"use strict";
+function readLocalStorage(key) {
+    var success;
+    try {
+        var value = localStorage.getItem(key);
+        if (value != null) {
+            document.form1["shib_idp_ls_value." + key].value = value;
+        }
+        success = "true";
+    } catch (e) {
+        success = "false";
+        document.form1["shib_idp_ls_exception." + key].value = e;
+    }
+    document.form1["shib_idp_ls_success." + key].value = success;
+}
+
+function isLocalStorageSupported() {
+    try {
+        localStorage.setItem("shib_idp_ls_test", "shib_idp_ls_test");
+        localStorage.removeItem("shib_idp_ls_test");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+        // -->
+        </script>
+    </head>
+    <body onload="doLoad()">
+        <div class="main-wrapper">
+			<header>
+				<a href="http://wlu.ca"><img src='/idp/images/laurier-logo.jpg' alt="Laurier logo"></a>
+			</header>			
+            <div>
+                <h2 class="banner-subtitle">Laurier - Single Sign On - Loading Session Information</h2>
+			</div>
+            <div class="signin-wrapper">
+				<div>
+                Loading login session information from the browser...
+                </div>
+                <noscript>
+                    <div>
+                    Since your browser does not support JavaScript, you must press the Continue button once to proceed.
+                    </div>
+                </noscript>
+<form name="form1" action="/idp/profile/SAML2/Redirect/SSO?execution=e1s1" method="post">
+        <input name="shib_idp_ls_exception.shib_idp_session_ss" type="hidden" />
+        <input name="shib_idp_ls_success.shib_idp_session_ss" type="hidden" value="false" />
+        <input name="shib_idp_ls_value.shib_idp_session_ss" type="hidden" />
+        <input name="shib_idp_ls_exception.shib_idp_persistent_ss" type="hidden" />
+        <input name="shib_idp_ls_success.shib_idp_persistent_ss" type="hidden" value="false" />
+        <input name="shib_idp_ls_value.shib_idp_persistent_ss" type="hidden" />
+    <input name="shib_idp_ls_supported" type="hidden" />
+    <input name="_eventId_proceed" type="hidden" />
+    <noscript>
+        <input type="submit" value="Continue" />
+    </noscript>
+</form>
+
+<script >
+<!--
+function doLoad() {
+    var localStorageSupported = isLocalStorageSupported();
+    document.form1["shib_idp_ls_supported"].value = localStorageSupported;
+    if (localStorageSupported) {
+        readLocalStorage("shib_idp_session_ss");
+        readLocalStorage("shib_idp_persistent_ss");
+    }
+    document.form1.submit();
+}
+// -->
+</script>
+            </div>
+			<footer>
+				<div class="footer">
+					<p class="footer-primary-text">
+						<a href="https://www.wlu.ca/about/governance/assets/resources/9.1-use-of-information-technology.html">Use of Information Technology Policy</a>
+					</p>
+				</div>
+			</footer>
+        </div>
+    </body>
+</html>

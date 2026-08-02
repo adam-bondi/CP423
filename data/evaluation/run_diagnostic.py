@@ -40,7 +40,7 @@ for _, row in df.iterrows():
         "correct": "",  # fill in manually after reading model_answer: yes / no / partial
     })
 
-os.makedirs("data/eval", exist_ok=True)
+os.makedirs("data/evaluation", exist_ok=True)
 out_df = pd.DataFrame(results)
 out_df.to_csv(OUT_PATH, index=False)
 
