@@ -50,4 +50,4 @@ Remember: use ONLY the context above, and cite every fact you use as [Chunk ID],
     
             return response.json()["response"]
         except requests.exceptions.ConnectionError:
-            print("Could not connect to Ollama. Make sure "ollama serve" is running.")
+            print("Could not connect to Ollama. Make sure 'ollama serve' is running.")
