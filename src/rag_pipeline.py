@@ -6,9 +6,11 @@ from generation.ollama_generator import OllamaGenerator
 #########################################
 # CHANGE ONLY THIS LINE DEPENDING ON RETRIEVER USED
 #########################################
-
-# retriever = DenseRetriever() 
+print("Using BM25 Retriever")
 retriever = BM25Retriever()
+
+# print("Using Dense Retriever")
+# retriever = DenseRetriever() 
 
 generator = OllamaGenerator()
 while True:
