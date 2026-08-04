@@ -112,6 +112,7 @@ CP423/
 │       └── run_diagnostic.py
 ├── .gitignore
 └── README.md
+└── requirements.txt
 ```
 
 `data/raw/pages/` (raw fetched HTML) and `data/indexes/` (BM25 pickle, FAISS index, and embeddings pickle) are excluded from version control via `.gitignore`, since both are fully reconstructible by rerunning the pipeline scripts below. `__pycache__/` directories are also excluded.
