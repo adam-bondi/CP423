@@ -12,6 +12,7 @@ class OllamaGenerator:
         self.temperature = temperature
 
     def generate(self, question, chunks):
+
         context = ""
         for rank, chunk in enumerate(chunks, start=1):
             context += (
@@ -25,6 +26,7 @@ class OllamaGenerator:
         Content:
         {chunk['chunk_text']}
         ==============================
+
         """
             )
 
@@ -43,7 +45,11 @@ class OllamaGenerator:
     - After each statement based on the retrieved context, include the supporting chunk inline citation using this format: [Chunk ID].
 
     If the retrieved context does not contain enough information to answer the question, respond exactly:
-    "I don't know."
+    "I don't know." 
+    - Do not explain why the answer is unavailable
+    - Do not provide related information.
+    - Do not mention missing context.
+    - In that case, your entire response must only be: I don't know.
     """
 
         try:
