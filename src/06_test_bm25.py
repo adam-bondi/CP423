@@ -2,7 +2,7 @@ import pickle
 import pandas as pd
 import nltk
 
-TOP_K = 5
+TOP_K = 10
 
 chunks = pd.read_csv("data/processed/chunks.csv")
 with open("data/indexes/bm25_index.pkl", "rb") as f:
