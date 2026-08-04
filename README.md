@@ -121,6 +121,7 @@ CP423/
 **Dependencies:**
 ```
 pip install pandas requests beautifulsoup4 tqdm nltk rank_bm25 faiss-cpu sentence-transformers
+pip install -r requirements.txt
 python -c "import nltk; nltk.download('punkt')"
 ```
 
