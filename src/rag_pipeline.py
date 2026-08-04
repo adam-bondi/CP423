@@ -21,15 +21,15 @@ while True:
     chunks = retriever.retrieve(question, top_k=5)
     print("\nRetrieved Chunks\n")
 
-for rank, chunk in enumerate(chunks, start=1):
-    print("=" * 70)
-    print(f"Rank: {rank}")
-    print(f"Chunk ID: {chunk['chunk_id']}")
-    print(f"Title: {chunk['title']}")
-    print(f"URL: {chunk['url']}")
-    print("\nContent:")
-    print(f"{chunk['chunk_text'][:250]}...")
-    print()
+    for rank, chunk in enumerate(chunks, start=1):
+        print("=" * 70)
+        print(f"Rank: {rank}")
+        print(f"Chunk ID: {chunk['chunk_id']}")
+        print(f"Title: {chunk['title']}")
+        print(f"URL: {chunk['url']}")
+        print("\nContent:")
+        print(f"{chunk['chunk_text'][:250]}...")
+        print()
 
     print("\nGenerating answer...\n")
     answer = generator.generate(
