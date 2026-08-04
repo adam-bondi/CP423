@@ -25,7 +25,7 @@ class BM25Retriever:
             row = self.chunks.iloc[idx]
             results.append({
                 "score": float(scores[idx]),
-                "chunk_id": int(row["chunk_id"]),
+                "chunk_id": str(row["chunk_id"]),
                 "doc_id": int(row["doc_id"]),
                 "title": row["title"],
                 "url": row["url"],
