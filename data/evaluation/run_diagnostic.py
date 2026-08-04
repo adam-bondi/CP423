@@ -3,8 +3,8 @@ import requests
 import json
 import os
 
-QUESTIONS_CSV = "data/eval/diagnostic_questions.csv"
-OUT_PATH = "data/eval/diagnostic_results.csv"
+QUESTIONS_CSV = "data/evaluation/diagnostic_questions.csv"
+OUT_PATH = "data/evaluation/diagnostic_results.csv"
 
 # Assumes Ollama is running locally with this model pulled (e.g. `ollama pull llama3.2`)
 OLLAMA_URL = "http://localhost:11434/api/generate"

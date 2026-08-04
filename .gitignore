@@ -1,0 +1,15 @@
+# Raw fetched HTML pages - reconstructible via src/02_fetch_pages.py
+data/raw/pages/
+
+# Local indexes - reconstructible via src/05_build_bm25.py and src/07_build_dense_index.py
+data/indexes/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

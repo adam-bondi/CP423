@@ -7,8 +7,8 @@ from generation.ollama_generator import OllamaGenerator
 # CHANGE ONLY THIS LINE DEPENDING ON RETRIEVER USED
 #########################################
 
-retriever = DenseRetriever() 
-# retriever = BM25Retriever()
+# retriever = DenseRetriever() 
+retriever = BM25Retriever()
 
 generator = OllamaGenerator()
 while True:
@@ -17,7 +17,7 @@ while True:
     if question.lower() == "quit":
         break
 
-    chunks = retriever.retrieve(question, top_k=5)
+    chunks = retriever.retrieve(question, top_k=10)
     print("\nRetrieved Chunks\n")
     for chunk in chunks:
         print("=" * 70)

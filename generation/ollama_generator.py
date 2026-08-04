@@ -21,27 +21,22 @@ class OllamaGenerator:
                 f"{chunk['chunk_text']}\n\n"
             )
 
-        prompt = f"""
-You are a question answering assistant.
+        prompt = f"""You are a question answering assistant that answers ONLY using the retrieved context below.
 
-Answer ONLY using the retrieved context.
+Do NOT use any outside knowledge, even if you are confident you know the correct answer. Your only source of truth is the context provided.
 
-If the answer cannot be determined from the context, reply exactly:
+If the context does not contain the answer, respond with EXACTLY these three words and nothing else:
+I don't know.
 
-"I don't know."
-
-Whenever you use information from a chunk,
-cite it inline like [Chunk 17].
+If the context DOES contain the answer, answer using only that information, and end every sentence that uses context information with a citation in the format [Chunk ID].
 
 Retrieved Context
-
 {context}
 
-Question
+Question: {question}
 
-{question}
+Remember: use ONLY the context above, and cite every fact you use as [Chunk ID], this is most important. If the context doesn't contain the answer, respond with exactly "I don't know." and nothing else.
 """
-
         response = requests.post(
             "http://localhost:11434/api/generate",
             json={
