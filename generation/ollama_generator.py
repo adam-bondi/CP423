@@ -26,7 +26,6 @@ class OllamaGenerator:
         Content:
         {chunk['chunk_text']}
         ==============================
-
         """
             )
 
@@ -41,8 +40,10 @@ class OllamaGenerator:
     Answer the question using ONLY the retrieved context provided above. Do not use outside knowledge.
 
     If the retrieved context contains enough information to answer the question:
-    - Provide a clear answer using only the information from the context.
-    - After each statement based on the retrieved context, include the supporting chunk inline citation using this format: [Chunk ID].
+    - The retrieved context may contain multiple relevant sources. 
+    - Use one or more chunks if needed. Provide a clear answer using only the information from the context.
+    - After each factual statement based on the retrieved context, cite the exact chunk ID where that information appears.
+    - Only cite chunks that directly support each statement. Include the supporting chunk inline citation using this format: [Chunk ID].
 
     If the retrieved context does not contain enough information to answer the question, respond exactly:
     "I don't know." 
@@ -50,6 +51,7 @@ class OllamaGenerator:
     - Do not provide related information.
     - Do not mention missing context.
     - In that case, your entire response must only be: I don't know.
+
     """
 
         try:
