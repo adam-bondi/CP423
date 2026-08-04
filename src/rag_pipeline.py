@@ -19,16 +19,18 @@ while True:
     if question.lower() == "quit":
         break
 
-    chunks = retriever.retrieve(question, top_k=10)
+    chunks = retriever.retrieve(question, top_k=5)
     print("\nRetrieved Chunks\n")
-    for chunk in chunks:
-        print("=" * 70)
-        print(f"Chunk {chunk['chunk_id']}")
-        print(chunk["title"])
-        print(chunk["url"])
-        print()
-        print(chunk["chunk_text"][:250])
-        print()
+
+for rank, chunk in enumerate(chunks, start=1):
+    print("=" * 70)
+    print(f"Rank: {rank}")
+    print(f"Chunk ID: {chunk['chunk_id']}")
+    print(f"Title: {chunk['title']}")
+    print(f"URL: {chunk['url']}")
+    print("\nContent:")
+    print(f"{chunk["chunk_text"][:250]}...")
+    print()
 
     print("\nGenerating answer...\n")
     answer = generator.generate(
