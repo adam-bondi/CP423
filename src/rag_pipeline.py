@@ -2,7 +2,6 @@ from retrieval.bm25_retriever import BM25Retriever
 from retrieval.dense_retriever import DenseRetriever
 from generation.ollama_generator import OllamaGenerator
 
-
 #########################################
 # CHANGE ONLY THIS LINE DEPENDING ON RETRIEVER USED
 #########################################
