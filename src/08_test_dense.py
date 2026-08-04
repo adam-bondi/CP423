@@ -2,7 +2,7 @@ import faiss
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 
-TOP_K = 5
+TOP_K = 10
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 chunks = pd.read_csv("data/processed/chunks.csv")
