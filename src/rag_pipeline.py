@@ -28,7 +28,7 @@ for rank, chunk in enumerate(chunks, start=1):
     print(f"Title: {chunk['title']}")
     print(f"URL: {chunk['url']}")
     print("\nContent:")
-    print(f"{chunk["chunk_text"][:250]}...")
+    print(f"{chunk['chunk_text'][:250]}...")
     print()
 
     print("\nGenerating answer...\n")
