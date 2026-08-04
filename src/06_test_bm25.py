@@ -21,8 +21,9 @@ while True:
     for rank, idx in enumerate(top, start=1):
 
         row = chunks.iloc[idx]
-        print("=" * 60)
-        print(rank)
+        print("=" * 70)
+        print(f"Rank {rank}")
+        print(f"Score: {scores[idx]:.4f}")
         print(row["title"])
         print(row["url"])
         print()
