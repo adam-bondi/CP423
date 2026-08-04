@@ -37,14 +37,17 @@ Question: {question}
 
 Remember: use ONLY the context above, and cite every fact you use as [Chunk ID], this is most important. If the context doesn't contain the answer, respond with exactly "I don't know." and nothing else.
 """
-        response = requests.post(
-            "http://localhost:11434/api/generate",
-            json={
-                "model": self.model,
-                "prompt": prompt,
-                "stream": False,
-                "options": {"temperature": self.temperature}
-            }
-        )
-
-        return response.json()["response"]
+        try:
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": self.model,
+                    "prompt": prompt,
+                    "stream": False,
+                    "options": {"temperature": self.temperature}
+                }
+            )
+    
+            return response.json()["response"]
+        except requests.exceptions.ConnectionError:
+            print("Could not connect to Ollama. Make sure "ollama serve" is running.")
