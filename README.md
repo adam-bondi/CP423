@@ -185,15 +185,17 @@ python src/07_build_dense_index.py
 
 ```python -m src.rag_pipeline```
 
-Select BM25Retriever or DenseRetriever near the top of src/rag_pipeline.py. 
+Select BM25Retriever or DenseRetriever near the top of src/rag_pipeline.py. This is where trial testing was performed.
 
-To test the gold_questions, run ```python src/evaluation.py``` which reproduces the Experimental Results with one command.
+To test the gold_questions, run...
+```python -m src.evaluation``` 
+which reproduces the Experimental Results with one command.
 
 This command:
-- rebuilds the BM25 index;
-- rebuilds the dense FAISS index;
-- runs the gold evaluation set through BM25 and dense RAG systems; and
-- regenerates data/evaluation/summary_results.csv.
+- imports the BM25 and dense retrievers
+- imports the Ollama generator
+- loads and runs the gold evaluation set through BM25 and dense RAG systems; and
+- generates data/evaluation/summary_results.csv.
 
 The evaluation script preserves existing human-grading columns when it is rerun. Because generation correctness and citation support require human judgment, those labels should be reviewed whenever generated answers change.
 
