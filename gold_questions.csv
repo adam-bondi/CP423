@@ -1,0 +1,11 @@
+question_id,question,type,reference_answer,ground_truth_chunk_ids
+1,"According to Wilfrid Laurier University guidelines, what are the two purposes of an informed consent statement or information letter?",factoid,"To enable potential participants to make an informed choice about whether to participate, and to document their decision to participate.","[""18_0""]"
+2,"At what age can a person normally give free and informed consent on their own behalf, according to Laurier's REB guidelines?",factoid,16 years and over.,"[""18_5""]"
+3,What is the Final Exam Dates for Spring 2026?,factoid,"Jul. 31-Aug, 14, 2026 (no exams Aug. 1,2,3)","[""247_0""]"
+4,When is the tution due date for Fall 2026?,factoid,"September 10, 2026.","[""1894_0""]"
+5,How many NSERC USRAs is the Faculty of Science allocated in the standard institutional allocation (not counting supplementary awards)?,factoid,20 NSERC USRAs.,"[""19_0""]"
+6,"What is the typical duration, in weeks, of a USRA award at Laurier?",factoid,The duration of the USRA award is 14 to 16 consecutive weeks on a full-time basis (35 hrs/week).,"[""19_1""]"
+7,Is Data Science an academic program with co-op? If so what GPA do Data Science students need to be eligible for a co-op admission interview?,multi-hop,"Data Science is an academic program with co-op. To be eligible for a co-op admission interview, Data Science students need to achieve a first-year overall GPA of at least 7.0 out of 12.","[""598_0"",""634_0""]"
+8,What is Laurier's grade scale? How can a student receive an official transcript with their GPA?,multi-hop,Laurier uses a 12-point grade scale. Official Transcripts can be requested via Laurier's online transcript ordering system.,"[""107_0"",""325_0""]"
+9,When was McMaster founded?,unanswerable,I don't know,[]
+10,What is the capital of Canada?,unanswerable,I don't know,[]
