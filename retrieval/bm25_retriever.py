@@ -15,12 +15,11 @@ class BM25Retriever:
             self.bm25 = pickle.load(f)
 
     def retrieve(self, query, top_k=5):
-
         tokens = nltk.word_tokenize(query.lower())
         scores = self.bm25.get_scores(tokens)
         top = scores.argsort()[-top_k:][::-1]
+        
         results = []
-
         for idx in top:
             row = self.chunks.iloc[idx]
             results.append({
