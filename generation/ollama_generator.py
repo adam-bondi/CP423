@@ -12,31 +12,40 @@ class OllamaGenerator:
         self.temperature = temperature
 
     def generate(self, question, chunks):
-
         context = ""
-        for chunk in chunks:
-
+        for rank, chunk in enumerate(chunks, start=1):
             context += (
-                f"[Chunk {chunk['chunk_id']}]\n"
-                f"{chunk['chunk_text']}\n\n"
+                f"""
+        ==============================
+        Retrieved Chunk Rank {rank}
+        Chunk ID: {chunk['chunk_id']}
+        Title: {chunk['title']}
+        URL: {chunk['url']}
+
+        Content:
+        {chunk['chunk_text']}
+        ==============================
+        """
             )
 
-        prompt = f"""You are a question answering assistant that answers ONLY using the retrieved context below.
+        prompt = f"""You are a question answering assistant.
 
-Do NOT use any outside knowledge, even if you are confident you know the correct answer. Your only source of truth is the context provided.
+    Retrieved Context:
+    {context}
 
-If the context does not contain the answer, respond with EXACTLY these three words and nothing else:
-I don't know.
+    Question:
+    {question}
 
-If the context DOES contain the answer, answer using only that information, and end every sentence that uses context information with a citation in the format [Chunk ID].
+    Answer the question using ONLY the retrieved context provided above. Do not use outside knowledge.
 
-Retrieved Context
-{context}
+    If the retrieved context contains enough information to answer the question:
+    - Provide a clear answer using only the information from the context.
+    - After each statement based on the retrieved context, include the supporting chunk inline citation using this format: [Chunk ID].
 
-Question: {question}
+    If the retrieved context does not contain enough information to answer the question, respond exactly:
+    "I don't know."
+    """
 
-Remember: use ONLY the context above, and cite every fact you use as [Chunk ID], this is most important. If the context doesn't contain the answer, respond with exactly "I don't know." and nothing else.
-"""
         try:
             response = requests.post(
                 "http://localhost:11434/api/generate",
