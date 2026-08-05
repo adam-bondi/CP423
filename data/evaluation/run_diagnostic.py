@@ -27,7 +27,6 @@ def ask_llm_no_context(question: str) -> str:
 
 
 df = pd.read_csv(QUESTIONS_CSV)
-
 results = []
 for _, row in df.iterrows():
     print(f"Asking Q{row['question_id']}...")
