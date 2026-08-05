@@ -11,7 +11,7 @@ from generation.ollama_generator import OllamaGenerator
 QUESTIONS_FILE = "data/evaluation/gold_questions.csv"
 OUTPUT_FILE = "data/evaluation/evaluation_results.csv"
 
-TOP_K = 5
+TOP_K = 7
 
 # load evaluation set
 questions = pd.read_csv(QUESTIONS_FILE)
