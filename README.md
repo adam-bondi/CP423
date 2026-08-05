@@ -19,7 +19,7 @@ The central question our project answers, supported by experimental evidence, is
 
 ## 2. Corpus Selection
 
-Among the suitable examples provided, we chose Wilfrid Laurier University's official **Student Homepage**, which contains university policies, academic calendars, regulations, co-op, residence, tuition, and related topics, as the source corpus for our RAG system. As Data Science students, we are familiar with the layout of the academic calendars and wanted to choose something that demonstrates retrieval rather than just generation. This corpus is primarily text-based, written in English, publicly available, and a narrow specialized subset of information. This corpus is...
+Among the suitable examples provided, we chose Wilfrid Laurier University's official **Student** pages, which contain university policies, academic calendars, regulations, co-op, residence, tuition, and related topics, as the source corpus for our RAG system. As students, we are familiar with the layout of this site and wanted to choose something that demonstrates retrieval rather than just generation. This corpus is primarily text-based, written in English, publicly available, and a narrow specialized subset of information. This corpus is...
 
 - Large enough that retrieval is necessary
 - Includes hundreds of rich, highly factual, detailed pages/documents
