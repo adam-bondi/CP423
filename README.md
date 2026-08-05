@@ -191,11 +191,11 @@ python src/07_build_dense_index.py
 
 Select BM25Retriever or DenseRetriever near the top of src/rag_pipeline.py. This is where trial testing was performed.
 
-To test the gold-standard set evaluation questions, run...
+5. Gold-standard set evaluation questions:
 
 ```python -m src.evaluation``` 
 
-which reproduces the Experimental Results with one command.
+Run this single command to reproduce the Experimental Results.
 
 This command:
 - imports the BM25 and dense retrievers
