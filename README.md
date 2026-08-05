@@ -212,12 +212,12 @@ _Note_: The evaluation script does not preserve existing human-grading columns (
 - FAISS IndexFlatIP performs deterministic exact search.
 - The same model, prompt, top_k=5, and generation settings are used for both retrieval systems.
 
-The process to reproduce all experimental results includes a required human-grading step, so it cannot be fully reproduced automatically from scratch with one command. Instead, the raw retrieval and generation outputs can be reproduced with `python -m src.evaluation`. Because generation correctness, evidential support, and citation accuracy were evaluated manually, the graded `evaluation_results.csv` is included in the repository. Running `python src/summarize_results.py` reproduces all reported tables and metrics from the recorded human judgments.
+The process to reproduce all experimental results includes a required human-grading step, so it cannot be fully reproduced automatically from scratch with one command. Instead, the raw retrieval and generation outputs can be reproduced with `python -m src.evaluation`. Because generation correctness, evidential support, and citation accuracy were evaluated manually, the graded `evaluation_results.csv` is included in the repository. Running `python src/summarize_results.py` reproduces all reported tables and metrics from the recorded human judgments to `.data/evaluation/metrics.txt`.
 
 Follow the structure below:
 
 - 1. ```python -m src.evaluation``` reruns both retrievers and the Ollama generation pipeline.
-- 2. ```python src/summarize_results.py``` reproduces the reported summary metrics
+- 2. ```python src/summarize_results.py``` reproduces the reported summary metrics file.
 
 **Known Limitations**
 - The gold set contains only ten questions and focuses on one university website.
