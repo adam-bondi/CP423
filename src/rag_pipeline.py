@@ -18,7 +18,7 @@ while True:
     if question.lower() == "quit":
         break
 
-    chunks = retriever.retrieve(question, top_k=7)
+    chunks = retriever.retrieve(question, top_k=5)
     print("\nRetrieved Chunks\n")
 
     for rank, chunk in enumerate(chunks, start=1):
