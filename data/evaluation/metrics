@@ -1,0 +1,25 @@
+======================================================================
+BM25
+======================================================================
+Questions: 10
+Answerable Questions: 8
+Unanswerable Questions: 2
+
+Hit@5: 100.00%
+Generation Accuracy: 100.00%
+Supported Answers: 100.00%
+Citation Accuracy: 37.50%
+I don't know Accuracy: 100.00%
+
+======================================================================
+Dense
+======================================================================
+Questions: 10
+Answerable Questions: 8
+Unanswerable Questions: 2
+
+Hit@5: 75.00%
+Generation Accuracy: 75.00%
+Supported Answers: 75.00%
+Citation Accuracy: 25.00%
+I don't know Accuracy: 100.00%
