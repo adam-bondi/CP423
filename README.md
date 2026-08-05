@@ -24,13 +24,13 @@ Overall, we think this corpus can successfully demonstrate the contribution of r
 
 ## 3. Tasks
 
-### a. Prepare the retrieval corpus
+### a. Prepare the Retrieval Corpus
 
 The retrieval corpus consists of official pages from the Wilfrid Laurier University Students website. URLs were obtained from the site's XML sitemap and filtered to include student information related to academics, career and experiential learning, campus services, programs, finances, and support and wellness. The `https://students.wlu.ca/sitemap.xml` contained 2,841 HTML documents. To filter our document collection, we filtered by page type. Rather than excluding entire sections, we filtered out page types whose URLs contain things like `/news/` and other non-reference pages that primarily contain time-sensitive announcements rather than stable factual information. After filtering, 1,959 candidate URLs remained.
 
 Each HTML page was treated as a source document, with metadata including the page URL, title, section, last-modified date, and a unique document identifier preserved throughout preprocessing.
 
-**Fetching and cleaning:** Pages were downloaded with a polite crawl delay (0.5s between requests). Raw HTML was parsed with BeautifulSoup; navigation, footer, header, and other non-content elements were stripped, along with WLU-specific boilerplate (breadcrumbs, banners, site header/footer). Common HTML entity and encoding artifacts introduced during scraping were normalized. Pages under 50 words after cleaning were dropped as low-content. This produced **1,872 final documents** from 1,957 successfully fetched pages (2 pages failed with 401 Unauthorized errors, restricted board/senate meeting pages).
+**Fetching and Preprocessing:** Pages were downloaded with a polite crawl delay (0.5s between requests). Raw HTML was parsed with BeautifulSoup; navigation, footer, header, and other non-content elements were stripped, along with WLU-specific boilerplate (breadcrumbs, banners, site header/footer). Common HTML entity and encoding artifacts introduced during scraping were normalized. Pages under 50 words after cleaning were dropped as low-content. This produced **1,872 final documents** from 1,957 successfully fetched pages (2 pages failed with 401 Unauthorized errors, restricted board/senate meeting pages).
 
 **Chunking:** Each document's cleaned text was split into overlapping chunks of 400 words with a 50-word overlap between consecutive chunks, preserving the parent document's ID and metadata on every chunk. This produced **5,456 chunks** across the 1,872 documents (avg. 2.91 chunks/document).
 
@@ -40,13 +40,13 @@ Pipeline: `01_parse_sitemap.py` → `02_fetch_pages.py` → `03_extract_text.py`
 
 Two retrieval methods were implemented over the 5,456-chunk index:
 
-**Classical retrieval (BM25):** Implemented with `rank_bm25`, using NLTK word tokenization on lowercased chunk text. Built with `05_build_bm25.py`, queryable interactively with `06_test_bm25.py`, and wrapped in `retrieval/bm25_retriever.py` for use in the full pipeline.
+**Classical Retrieval (BM25):** Implemented with `rank_bm25`, using NLTK word tokenization on lowercased chunk text. Built with `05_build_bm25.py`, queryable interactively with `06_test_bm25.py`, and wrapped in `retrieval/bm25_retriever.py` for use in the full pipeline.
 
-**Dense retrieval:** Implemented using the pretrained `sentence-transformers/all-MiniLM-L6-v2` embedding model (384-dimensional embeddings), indexed with FAISS (`IndexFlatIP` over normalized embeddings, equivalent to cosine similarity). Built with `07_build_dense_index.py`, queryable interactively with `08_test_dense.py`, and wrapped in `retrieval/dense_retriever.py`.
+**Dense Retrieval:** Implemented using the pretrained `sentence-transformers/all-MiniLM-L6-v2` embedding model (384-dimensional embeddings), indexed with FAISS (`IndexFlatIP` over normalized embeddings, equivalent to cosine similarity). Built with `07_build_dense_index.py`, queryable interactively with `08_test_dense.py`, and wrapped in `retrieval/dense_retriever.py`.
 
 Both retrievers expose a common `.retrieve(query, top_k)` interface returning ranked chunks with score, chunk ID, document ID, title, URL, and chunk text, so either can be swapped into the generation pipeline interchangeably.
 
-**Observed retrieval behavior:** During testing, BM25 and dense retrieval showed different strengths depending on query phrasing. For short, keyword-style queries (e.g. `"USRA GPA requirement"`), BM25 retrieved highly precise, on-topic results. For the same information need phrased as a natural-language question (e.g. `"What GPA do I need to apply for a USRA?"`), both retrievers initially failed to surface the correct chunk at `top_k=5`; increasing to `top_k=10` allowed the correct chunk to be retrieved. This is discussed further in Section 3d and in our error analysis.
+**Observed Retrieval Behaviour:** During testing, BM25 and dense retrieval showed different strengths depending on query phrasing. For short, keyword-style queries (e.g. `"USRA GPA requirement"`), BM25 retrieved highly precise, on-topic results. For the same information need phrased as a natural-language question (e.g. `"What GPA do I need to apply for a USRA?"`), both retrievers initially failed to surface the correct chunk at `top_k=5`; increasing to `top_k=10` allowed the correct chunk to be retrieved. This is discussed further in Section 3d and in our error analysis.
 
 ### c. Answer Generation
 
@@ -69,13 +69,13 @@ Implementation: `generation/ollama_generator.py` (`OllamaGenerator` class). The 
 
 ### d. Evaluation
 
-**Diagnostic experiment (corpus validation):** Per the assignment requirements, we tested whether Llama 3.2 already "knows" our corpus content from pretraining. Ten factual questions were written from actual corpus pages (informed consent guidelines, USRA award details, Romeo research portal) and asked to the model with **no retrieved context** (`data/evaluation/run_diagnostic.py`, questions and reference answers in `data/evaluation/diagnostic_questions.csv`).
+**Diagnostic Experiment (Corpus Validation):** Per the assignment requirements, we tested whether Llama 3.2 already "knows" our corpus content from pretraining. Ten factual questions were written from actual corpus pages (informed consent guidelines, USRA award details, Romeo research portal) and asked to the model with **no retrieved context** (`data/evaluation/run_diagnostic.py`, questions and reference answers in `data/evaluation/diagnostic_questions.csv`).
 
 **Result: 0/10 correct.** The model consistently reported it had no specific knowledge of Laurier's guidelines, USRA figures, or internal systems like Romeo, rather than guessing (see `data/evaluation/diagnostic_results.csv` for full model responses). This confirms the corpus is sufficiently narrow and specialized that any correct answers from our full RAG pipeline are attributable to retrieval, not the model's pretraining — directly supporting our corpus selection rationale in Section 2.
 
-**Gold evaluation set:** A hand-written gold-standard set of 10 questions was created by manually reading the corpus — 6 factoid, 2 multi-hop (requiring evidence from two different chunks/documents), and 2 unanswerable (genuinely outside the corpus's scope). Each answerable question includes a reference answer and one or more ground-truth `chunk_id`(s). The set is stored in `data/evaluation/gold_questions.csv`.
+**Gold Evaluation Set:** A hand-written gold-standard set of 10 questions was created by manually reading the corpus — 6 factoid, 2 multi-hop (requiring evidence from two different chunks/documents), and 2 unanswerable (genuinely outside the corpus's scope). Each answerable question includes a reference answer and one or more ground-truth `chunk_id`(s). The set is stored in `data/evaluation/gold_questions.csv`.
 
-**top_k selection:** Before running the full evaluation, we tested `top_k ∈ {5, 7, 10}` on representative queries and found a clear recall-vs-precision tradeoff: smaller `top_k` values sometimes failed to retrieve the chunk containing the answer (a recall problem), while larger values increased the amount of irrelevant context passed to the LLM, which measurably increased the rate of false "I don't know" refusals — cases where the correct chunk *was* retrieved but the model failed to use it. Based on aggregate correctness across the gold set, **`top_k=7`** was selected as the standard setting used throughout the pipeline (`rag_pipeline.py` and `src/evaluation.py`).
+**top_k Selection:** Before running the full evaluation, we tested `top_k ∈ {5, 7, 10}` on representative queries and found a clear recall-vs-precision tradeoff: smaller `top_k` values sometimes failed to retrieve the chunk containing the answer (a recall problem), while larger values increased the amount of irrelevant context passed to the LLM, which measurably increased the rate of false "I don't know" refusals — cases where the correct chunk *was* retrieved but the model failed to use it. Based on aggregate correctness across the gold set, **`top_k=7`** was selected as the standard setting used throughout the pipeline (`rag_pipeline.py` and `src/evaluation.py`).
 
 **Evaluation procedure:** Both BM25 and dense retrieval were run over the full gold set at `top_k=7`, using the same Llama 3.2 model, prompt, and generation settings (`src/evaluation.py`, reproducible via `python -m src.evaluation`). Retrieval hit (whether the ground-truth chunk was retrieved) was computed automatically. Generated answers were then graded manually by the team for four criteria: **correct** (does the answer content match the reference answer — yes/partial/no), **supported** (is the answer actually backed by the retrieved context, rather than outside knowledge), **citation_correct** (does the cited `[Chunk ID]` match a genuine ground-truth or otherwise relevant source), and **idk_correct** (for unanswerable questions, did the system correctly refuse). Full graded results are in `data/evaluation/evaluation_results.csv`.
 
@@ -88,7 +88,7 @@ Implementation: `generation/ollama_generator.py` (`OllamaGenerator` class). The 
 
 Both retrievers correctly refused both unanswerable questions (100% `idk_correct`).
 
-**Key findings / error analysis:**
+**Key Findings/Error Analysis:**
 
 - **BM25 achieved perfect retrieval recall** on this corpus, likely because our questions use terminology that closely matches the source pages (WLU policy language, program names, exact figures). **Dense retrieval missed 2 of 8 questions**, both involving specific dates (final exam dates, tuition due dates) — dense embeddings appear less reliable at distinguishing between semantically similar numeric/date content across many similar administrative pages.
 - **Generation correctness lagged behind retrieval hit rate for both retrievers.** Even when the correct chunk was retrieved, the model sometimes failed to use it — either responding "I don't know" despite having the evidence (a *false refusal*, seen on BM25 questions 5 and 6), or citing a different, incorrect chunk while still producing correct or partially correct answer content.
@@ -135,7 +135,7 @@ CP423/
 │       ├── diagnostic_results.csv
 │       ├── run_diagnostic.py
 |       ├── metrics.txt
-|       ├── graded_columns_top7.csv # providing the hand written results for these fields: correct, supported, citation_correct, idk_correct, notes
+|       ├── graded_columns_top7.csv # Providing the handwritten results for these fields: correct, supported, citation_correct, idk_correct, notes
 │       ├── gold_questions.csv     # Hand-written gold evaluation set (10 questions)
 │       └── evaluation_results.csv # Full graded results (retrieval + generation)
 ├── .gitignore
