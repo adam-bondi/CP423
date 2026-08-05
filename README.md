@@ -72,7 +72,7 @@ Both retrievers expose a common `.retrieve(query, top_k)` interface returning ra
 Answer generation uses a locally deployed, free LLM via [Ollama](https://ollama.com): **Meta Llama 3.2 (3B)**, accessed through Ollama's local REST API (`http://localhost:11434/api/generate`), with `temperature=0` for deterministic outputs.
 
 The model is prompted with the retrieved chunks (labelled `[Chunk ID]`) and the user's question, and instructed to:
-- Answer **only** using the provided context, never outside/parametric knowledge
+- Answer **only** using the provided context (k=5 most highly graded text chunks), never outside/parametric knowledge
 - Reply with exactly `"I don't know."` when the context does not contain the answer
 - Cite every fact used with an inline `[Chunk ID]` tag
 
@@ -96,7 +96,7 @@ The gold set contains ten manually written and verified questions:
 - 2 multi-hop questions requiring evidence from multiple chunks or documents; and
 - 2 unanswerable questions
 
-Each answerable question includes a reference answer and one or more ground-truth chunk IDs. Both retrieval systems were evaluated with top_k=5 and the same Llama model, prompt, and generation settings. Retrieval metrics were computed automatically. Generated answers were graded manually for correctness, support, citation accuracy, and correct refusal on unanswerable questions.
+Each answerable question includes a reference answer and one or more ground-truth chunk IDs. Both retrieval systems were evaluated with `top_k=5` (after hyperparameter tuning, k=5 outperformed k=7 and k=10, which produced unnecessary noise for the model), the same Llama model, prompt, and generation settings. Retrieval metrics were computed automatically. Generated answers were graded manually for correctness, support, citation accuracy, and correct refusal on unanswerable questions.
 
 **Results:** Results are shown in `data/evaluation/evaluation_results.csv`
 
@@ -189,13 +189,13 @@ python src/07_build_dense_index.py
 4. Run the interactive RAG:
 ```python -m src.rag_pipeline```
 
-Edit the retriever selection (BM25Retriever or DenseRetriever) at the top of `src/rag_pipeline.py` file to quickly switch between models. This is where trial testing was performed. Currently set to `top-k=5`, our chosen standard.
+Edit the retriever selection (BM25Retriever or DenseRetriever) at the top of `src/rag_pipeline.py` file to quickly switch between models. This is where trial and ad-hoc testing were performed. Currently set to `top-k=5`, our chosen standard.
 
 5. Gold-standard set evaluation questions:
 
 ```python -m src.evaluation``` 
 
-Run this single command to reproduce the Experimental Results. This runs all 10 gold-standard questions through both BM25 and dense retrieval, generates responses, and saves raw results to `./data/evalaution/evaluation_results.csv`. 
+Run this single command to reproduce the Experimental Results. This runs all 10 gold-standard questions through both BM25 and dense retrieval, generates responses, and saves raw results to `./data/evalaution/evaluation_results.csv`. Note that evaluation has a high processing time.
 
 This command:
 - imports the BM25 and dense retrievers
